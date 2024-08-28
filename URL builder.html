@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>URL Builder : Orange Travel</title>
+</head>
+<body>
+    <h1>URL Builder : Orange Travel</h1>
+    <p>Cet outil doit permettre de créer facilement des URL traquées à la fois pour Google Analytics via les UTM et pour Appsflyer via la structure de paramètres dédiées</p>
+    <form id="campaignForm">
+        <h3>Paramètres de la campagne</h3>
+
+        <label for="url">URL:</label><br>
+        <input type="text" id="url" name="url" value="https://travel.orange.com"><br><br>
+
+        <label for="source">Source de la campagne:</label><br>
+        <input type="text" id="source" name="source"><br><br>
+
+        <label for="medium">Support de la campagne:</label><br>
+        <input type="text" id="medium" name="medium"><br><br>
+
+        <label for="campaignName">Nom de la campagne:</label><br>
+        <input type="text" id="campaignName" name="campaignName"><br><br>
+
+        <label for="content">Contenu de la campagne:</label><br>
+        <input type="text" id="content" name="content"><br><br>
+
+        <h3>Paramètres Appsflyer</h3>
+
+        <label for="afSource">Source Appsflyer:</label><br>
+        <input type="text" id="afSource" name="afSource"><br><br>
+
+        <label for="afCampaign">Campagne Appsflyer:</label><br>
+        <input type="text" id="afCampaign" name="afCampaign"><br><br>
+
+        <label for="afLookback">Lookback window Appsflyer:</label><br>
+        <input type="text" id="afLookback" name="afLookback"><br><br>
+
+        <label for="afAdset">Ad set Appsflyer:</label><br>
+        <input type="text" id="afAdset" name="afAdset"><br><br>
+
+        <label for="afAd">Annonce Appsflyer:</label><br>
+        <input type="text" id="afAd" name="afAd"><br><br>
+
+        <button type="submit">Valider</button>
+    </form>
+
+    <h3>Résultat:</h3>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('campaignForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            // Récupère les valeurs des champs
+            var url = document.getElementById('url').value;
+            var params = [];
+
+            // Ajoute les paramètres à l'URL s'ils ne sont pas vides
+            function addParam(name, value) {
+                if (value) {
+                    params.push(name + "=" + encodeURIComponent(value));
+                }
+            }
+
+            addParam("utm_source", document.getElementById('source').value);
+            addParam("utm_medium", document.getElementById('medium').value);
+            addParam("utm_campaign", document.getElementById('campaignName').value);
+            addParam("utm_content", document.getElementById('content').value);
+            addParam("pid", document.getElementById('afSource').value);
+            addParam("c", document.getElementById('afCampaign').value);
+            addParam("af_click_lookback", document.getElementById('afLookback').value);
+            addParam("af_adset", document.getElementById('afAdset').value);
+            addParam("af_ad", document.getElementById('afAd').value);
+
+            // Construit l'URL complète avec les paramètres présents
+            var fullURL = url;
+            if (params.length > 0) {
+                fullURL += "?" + params.join("&");
+            }
+
+            // Affiche l'URL complète dans le champ résultat
+            document.getElementById('result').innerHTML = "<a href='" + fullURL + "'>" + fullURL + "</a>";
+        });
+    </script>
+</body>
+</html>
